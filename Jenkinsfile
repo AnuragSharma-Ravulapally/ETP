@@ -2,20 +2,26 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Clone Repo') {
             steps {
-                script {
-                    bat 'docker build -t my_app_image .'
-                }
+                git branch: 'master', url: 'https://github.com/AnuragSharma-Ravulapally/ETP.git'
+            }
+        }
+        stage('Build Images') {
+            steps {
+                bat 'docker-compose build'
             }
         }
 
-        stage('Run') {
+        stage('Run Containers') {
             steps {
-                script {
-                    // Run the Docker container
-                    bat 'docker-compose up -d'
-                }
+                bat 'docker-compose up -d'
+            }
+        }
+
+        stage('Test Containers') {
+            steps {
+                bat 'docker ps'
             }
         }
     }
